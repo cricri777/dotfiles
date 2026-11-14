@@ -1,0 +1,3 @@
+# Needs a Nerd Font in the terminal.
+gui:
+  nerdFontsVersion: "3"

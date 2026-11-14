@@ -1,0 +1,2 @@
+# Plugins installed with `herdr plugin install <owner/repo>`
+m4salah/herdr-plugin-last
