@@ -1,0 +1,34 @@
+# dotfiles
+
+Personal configs for nvim, lazygit and herdr, shared across laptops.
+
+## Install
+
+```bash
+git clone https://github.com/cricri777/dotfiles.git ~/git/perso/dotfiles
+~/git/perso/dotfiles/install.sh
+```
+
+The script symlinks each config into `~/.config`. Existing files are moved to `~/.config-backup-<timestamp>` first, so re-running it is safe.
+
+## Layout
+
+| Path | Linked to |
+| --- | --- |
+| `nvim/` | `~/.config/nvim` |
+| `lazygit/` | `~/.config/lazygit` |
+| `herdr/config.toml` | `~/.config/herdr/config.toml` |
+
+## Contributing
+
+1. Create a branch: `git checkout -b <short-description>`.
+2. Make your change in this repo, not in `~/.config`. The symlinks make the edits show up there.
+3. Commit with a short message that says what changed and why.
+4. Push the branch and open a pull request into `main`.
+
+Guidelines:
+
+- Keep only portable config. Do not commit runtime or machine-specific files such as logs, sockets, sessions, plugin checkouts or build output.
+- Never commit secrets (tokens, passwords, API keys). Use environment variables or a local file that is git-ignored instead.
+- Commit `nvim/lazy-lock.json` after plugin updates so every laptop gets the same versions.
+- To add a tool, create a folder for it at the root and add a line to `install.sh`.
