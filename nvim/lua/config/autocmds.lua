@@ -31,3 +31,13 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end)
   end,
 })
+
+-- Disable LazyVim's default spell checking for text filetypes but keep line wrapping.
+vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
+vim.api.nvim_create_autocmd("FileType", {
+  group = vim.api.nvim_create_augroup("wrap_text", { clear = true }),
+  pattern = { "text", "plaintex", "typst", "gitcommit", "markdown" },
+  callback = function()
+    vim.opt_local.wrap = true
+  end,
+})
