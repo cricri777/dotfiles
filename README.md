@@ -65,6 +65,7 @@ rm ~/.config/nvim && mv ~/.config-backup-<timestamp>/nvim ~/.config/nvim
 | `lazygit/` | `~/.config/lazygit` |
 | `herdr/config.toml` | `~/.config/herdr/config.toml` |
 | `herdr/plugins.txt` | Herdr plugins to install (not linked) |
+| `shell/aliases.sh` | `~/.config/shell/aliases.sh`, sourced once from `~/.bashrc` (`n` = nvim, `lg` = lazygit) |
 
 ## Contributing
 
