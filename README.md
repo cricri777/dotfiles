@@ -68,17 +68,17 @@ The plugin is pinned to a commit when installed. To pull a newer version, run `h
 
 ### Keybindings
 
-`herdr/config.toml` already binds last-tab:
+`herdr/config.toml` binds last-tab to `prefix+tab`:
 
 ```toml
 [[keys.command]]
-key = "prefix+t"
+key = "prefix+tab"
 type = "plugin_action"
 command = "m4salah.last.last-tab"
 description = "toggle to last focused tab"
 ```
 
-- Do not use `prefix+;` for last-tab. This config binds it to `last_pane`.
+- `prefix+t` is bound to `last_pane` in this config (`last_pane = "prefix+t"`), not to last-tab. `prefix+;` is no longer used.
 - `last-workspace` is not bound. To bind it, add a block like the one above with `command = "m4salah.last.last-workspace"`. Pick a key that is not already used in `herdr/config.toml`. Herdr does not report key collisions.
 
 After editing the config, reload it:
