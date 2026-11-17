@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal configs for nvim, lazygit and herdr, shared across laptops.
+Personal configs for nvim, lazygit, herdr and Claude Code keybindings, shared across laptops.
 
 ## Supported platforms
 
@@ -16,10 +16,10 @@ Install the tools first:
 
 ```bash
 # Arch / Omarchy
-sudo pacman -S neovim lazygit git
+sudo pacman -S neovim lazygit git jq
 
 # Debian / Ubuntu / WSL (lazygit may be outdated in apt; see https://github.com/jesseduffield/lazygit#installation)
-sudo apt install neovim git
+sudo apt install neovim git jq
 ```
 
 - Herdr: see https://herdr.dev.
@@ -32,7 +32,7 @@ git clone https://github.com/cricri777/dotfiles.git ~/git/perso/dotfiles
 ~/git/perso/dotfiles/install.sh
 ```
 
-The script symlinks each config into `~/.config`. Existing files are moved to `~/.config-backup-<timestamp>` first, so re-running it is safe.
+The script symlinks each config into `~/.config` (Claude Code keybindings go to `~/.claude`, and the voice settings are merged into `~/.claude/settings.json`). Existing files are moved to `~/.config-backup-<timestamp>` first, so re-running it is safe.
 
 Then install the herdr plugins listed in `herdr/plugins.txt` (plugins may need `cargo` to build):
 
@@ -64,6 +64,8 @@ rm ~/.config/nvim && mv ~/.config-backup-<timestamp>/nvim ~/.config/nvim
 | `nvim/` | `~/.config/nvim` |
 | `lazygit/` | `~/.config/lazygit` |
 | `herdr/config.toml` | `~/.config/herdr/config.toml` |
+| `claude/keybindings.json` | `~/.claude/keybindings.json` |
+| `claude/settings.shared.json` | Merged into `~/.claude/settings.json` with `jq` |
 | `herdr/plugins.txt` | Herdr plugins to install (not linked) |
 
 ## Contributing
