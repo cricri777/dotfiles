@@ -6,10 +6,10 @@ Install the tools first:
 
 ```bash
 # Arch / Omarchy
-sudo pacman -S neovim lazygit git
+sudo pacman -S neovim lazygit git jq
 
 # Debian / Ubuntu / WSL (lazygit may be outdated in apt; see https://github.com/jesseduffield/lazygit#installation)
-sudo apt install neovim git
+sudo apt install neovim git jq
 ```
 
 - Herdr: see https://herdr.dev.
@@ -22,7 +22,7 @@ git clone https://github.com/cricri777/dotfiles.git ~/git/perso/dotfiles
 ~/git/perso/dotfiles/install.sh
 ```
 
-The script symlinks each config into `~/.config`. Existing files are moved to `~/.config-backup-<timestamp>` first, so re-running it is safe.
+The script symlinks each config into `~/.config` (Claude Code keybindings go to `~/.claude`, and the voice settings are merged into `~/.claude/settings.json`). Existing files are moved to `~/.config-backup-<timestamp>` first, so re-running it is safe.
 
 It also adds one line to `~/.bashrc` that sources the shared aliases (`n` = nvim, `lg` = lazygit). Running the script again does not add the line twice.
 
@@ -48,7 +48,7 @@ herdr plugin list
 Backups from `install.sh` are kept in `~/.config-backup-<timestamp>`. To restore one, remove the symlink and move the backup back:
 
 ```bash
-rm ~/.config/nvim && mv ~/.config-backup-<timestamp>/nvim ~/.config/nvim
+rm ~/.config/nvim && mv ~/.config-backup-<timestamp>/.config/nvim ~/.config/nvim
 ```
 
 ## Layout
@@ -60,3 +60,5 @@ rm ~/.config/nvim && mv ~/.config-backup-<timestamp>/nvim ~/.config/nvim
 | `herdr/config.toml` | `~/.config/herdr/config.toml` |
 | `herdr/plugins.txt` | Herdr plugins to install (not linked) |
 | `shell/aliases.sh` | `~/.config/shell/aliases.sh`, sourced once from `~/.bashrc` |
+| `claude/keybindings.json` | `~/.claude/keybindings.json` |
+| `claude/settings.shared.json` | Merged into `~/.claude/settings.json` with `jq` |
