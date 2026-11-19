@@ -20,3 +20,34 @@ vim.schedule(function()
     require("fff").live_grep({ grep = { modes = { "fuzzy", "plain" } } })
   end, { desc = "Fuzzy Grep (fff)" })
 end)
+
+-- Alt+M: expand NeoTree to take the whole screen, or restore its original width.
+-- It never closes the tree (use <leader>e for that). If NeoTree is hidden, it is shown first.
+local neotree_expanded = false
+local neotree_base_width = nil
+
+local function neotree_win()
+  for _, win in ipairs(vim.api.nvim_list_wins()) do
+    if vim.bo[vim.api.nvim_win_get_buf(win)].filetype == "neo-tree" then
+      return win
+    end
+  end
+end
+
+vim.keymap.set("n", "<M-m>", function()
+  local win = neotree_win()
+  if not win then
+    vim.cmd("Neotree show")
+    neotree_expanded = false
+    return
+  end
+
+  if neotree_expanded then
+    vim.api.nvim_win_set_width(win, neotree_base_width or 40)
+    neotree_expanded = false
+  else
+    neotree_base_width = vim.api.nvim_win_get_width(win)
+    vim.api.nvim_win_set_width(win, vim.o.columns)
+    neotree_expanded = true
+  end
+end, { desc = "Toggle NeoTree width (expand / restore)" })
