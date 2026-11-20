@@ -59,24 +59,54 @@ end, { desc = "Toggle NeoTree width (expand / restore)" })
 vim.keymap.set("t", "<C-\\><C-n>", "<Nop>", { desc = "Disabled (use <Esc><Esc>)" })
 vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Terminal: exit to normal mode" })
 
--- Alt+T: resize the terminal split so it is a bit smaller than the code window.
--- Stacked below the code (horizontal split) -> ~35% of the screen height.
--- Side by side with the code (vertical split) -> ~40% of the screen width.
--- Works from normal and terminal mode, only on terminal windows.
-local TERM_HEIGHT_RATIO = 0.35
+-- Alt+T: open / focus a terminal in a horizontal split at the bottom, small (~20% of the
+-- screen height) so the code window keeps most of the space.
+--   * a terminal window is visible in this tab -> focus it and resize it
+--   * a terminal buffer exists but is hidden   -> reopen it in a bottom split
+--   * otherwise                                -> open a new terminal in a bottom split
+-- Pressing it again from inside the terminal just re-applies the size.
+-- Side-by-side (vertical) terminals get ~40% of the width instead; floating ones are left alone.
+local TERM_HEIGHT_RATIO = 0.20
 local TERM_WIDTH_RATIO = 0.40
 
-vim.keymap.set({ "n", "t" }, "<M-t>", function()
-  local win = vim.api.nvim_get_current_win()
-  if vim.bo[vim.api.nvim_win_get_buf(win)].buftype ~= "terminal" then
+local function is_term_buf(buf)
+  return vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == "terminal"
+end
+
+local function size_term_win(win)
+  if vim.api.nvim_win_get_config(win).relative ~= "" then
     return
   end
-  if vim.api.nvim_win_get_config(win).relative ~= "" then
-    return -- floating terminal: nothing to resize
-  end
   if vim.api.nvim_win_get_width(win) >= vim.o.columns then
-    vim.api.nvim_win_set_height(win, math.floor(vim.o.lines * TERM_HEIGHT_RATIO))
+    vim.api.nvim_win_set_height(win, math.max(3, math.floor(vim.o.lines * TERM_HEIGHT_RATIO)))
   else
     vim.api.nvim_win_set_width(win, math.floor(vim.o.columns * TERM_WIDTH_RATIO))
   end
-end, { desc = "Resize terminal split (smaller than code window)" })
+end
+
+vim.keymap.set({ "n", "t" }, "<M-t>", function()
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if is_term_buf(vim.api.nvim_win_get_buf(win)) and vim.api.nvim_win_get_config(win).relative == "" then
+      vim.api.nvim_set_current_win(win)
+      size_term_win(win)
+      vim.cmd("startinsert")
+      return
+    end
+  end
+
+  local hidden
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if is_term_buf(buf) and vim.fn.bufwinid(buf) == -1 then
+      hidden = buf
+      break
+    end
+  end
+
+  vim.cmd("botright " .. math.max(3, math.floor(vim.o.lines * TERM_HEIGHT_RATIO)) .. "split")
+  if hidden then
+    vim.api.nvim_win_set_buf(0, hidden)
+  else
+    vim.cmd("terminal")
+  end
+  vim.cmd("startinsert")
+end, { desc = "Terminal: open / focus bottom split (small)" })
