@@ -7,5 +7,6 @@ return {
   opts = {
     base_path = vim.fn.getcwd(),
     prompt_vim_mode = true,
+    layout = { prompt_position = "top" },
   },
 }

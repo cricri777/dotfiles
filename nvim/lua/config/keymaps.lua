@@ -59,54 +59,69 @@ end, { desc = "Toggle NeoTree width (expand / restore)" })
 vim.keymap.set("t", "<C-\\><C-n>", "<Nop>", { desc = "Disabled (use <Esc><Esc>)" })
 vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Terminal: exit to normal mode" })
 
--- Alt+T: open / focus a terminal in a horizontal split at the bottom, small (~20% of the
--- screen height) so the code window keeps most of the space.
---   * a terminal window is visible in this tab -> focus it and resize it
---   * a terminal buffer exists but is hidden   -> reopen it in a bottom split
---   * otherwise                                -> open a new terminal in a bottom split
--- Pressing it again from inside the terminal just re-applies the size.
--- Side-by-side (vertical) terminals get ~40% of the width instead; floating ones are left alone.
+-- Alt+T: open a terminal in a bottom split under the main editor window (not under the file tree).
+-- Pressing it again toggles that terminal between ~20% of the screen height and full height.
 local TERM_HEIGHT_RATIO = 0.20
-local TERM_WIDTH_RATIO = 0.40
 
-local function is_term_buf(buf)
-  return vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == "terminal"
+local function is_floating(win)
+  return vim.api.nvim_win_get_config(win).relative ~= ""
 end
 
-local function size_term_win(win)
-  if vim.api.nvim_win_get_config(win).relative ~= "" then
-    return
+local function buftype(win)
+  return vim.bo[vim.api.nvim_win_get_buf(win)].buftype
+end
+
+local function small_height()
+  return math.max(3, math.floor(vim.o.lines * TERM_HEIGHT_RATIO))
+end
+
+local function find_term_win()
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if not is_floating(win) and buftype(win) == "terminal" then
+      return win
+    end
   end
-  if vim.api.nvim_win_get_width(win) >= vim.o.columns then
-    vim.api.nvim_win_set_height(win, math.max(3, math.floor(vim.o.lines * TERM_HEIGHT_RATIO)))
-  else
-    vim.api.nvim_win_set_width(win, math.floor(vim.o.columns * TERM_WIDTH_RATIO))
+end
+
+-- The current window if it is a normal file window, else the widest non-terminal one.
+local function editor_win()
+  local cur = vim.api.nvim_get_current_win()
+  if buftype(cur) == "" then
+    return cur
   end
+  local best
+  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
+    if not is_floating(win) and buftype(win) ~= "terminal"
+      and (not best or vim.api.nvim_win_get_width(win) > vim.api.nvim_win_get_width(best)) then
+      best = win
+    end
+  end
+  return best or cur
 end
 
 vim.keymap.set({ "n", "t" }, "<M-t>", function()
-  for _, win in ipairs(vim.api.nvim_tabpage_list_wins(0)) do
-    if is_term_buf(vim.api.nvim_win_get_buf(win)) and vim.api.nvim_win_get_config(win).relative == "" then
-      vim.api.nvim_set_current_win(win)
-      size_term_win(win)
-      vim.cmd("startinsert")
-      return
-    end
+  local win = find_term_win()
+  if win then
+    local small = small_height()
+    local big = vim.api.nvim_win_get_height(win) > small + 1
+    vim.api.nvim_win_set_height(win, big and small or vim.o.lines)
+    vim.api.nvim_set_current_win(win)
+    return
   end
 
   local hidden
   for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if is_term_buf(buf) and vim.fn.bufwinid(buf) == -1 then
+    if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == "terminal" and vim.fn.bufwinid(buf) == -1 then
       hidden = buf
       break
     end
   end
 
-  vim.cmd("botright " .. math.max(3, math.floor(vim.o.lines * TERM_HEIGHT_RATIO)) .. "split")
+  vim.api.nvim_set_current_win(editor_win())
+  vim.cmd("belowright " .. small_height() .. "split")
   if hidden then
     vim.api.nvim_win_set_buf(0, hidden)
   else
     vim.cmd("terminal")
   end
-  vim.cmd("startinsert")
-end, { desc = "Terminal: open / focus bottom split (small)" })
+end, { desc = "Terminal: open under editor / toggle 20% <-> full" })
