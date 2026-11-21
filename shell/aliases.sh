@@ -3,7 +3,5 @@
 alias n='nvim'
 alias lg='lazygit'
 cricri-auto() {
-  mkdir -p ~/.cache/cricri
-  claude -p "/cricri --auto $*" --dangerously-skip-permissions \
-    2>&1 | tee ~/.cache/cricri/"$(basename "$PWD")-$(date +%Y%m%d-%H%M).log"
+  claude --dangerously-skip-permissions "/cricri --auto $*"
 }
