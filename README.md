@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal configs for nvim, lazygit, herdr and Claude Code keybindings, shared across laptops.
+Personal configs for nvim, lazygit, herdr and Claude Code (rules, hooks, the `/cricri` skill), shared across laptops.
 
 ## Supported platforms
 

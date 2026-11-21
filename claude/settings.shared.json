@@ -2,5 +2,19 @@
   "voice": {
     "enabled": true,
     "mode": "hold"
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$HOME/.claude/hooks/cricri-guard.sh\"",
+            "timeout": 900
+          }
+        ]
+      }
+    ]
   }
 }

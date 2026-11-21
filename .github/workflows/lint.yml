@@ -3,8 +3,8 @@ name: Lint
 on: [push, pull_request]
 
 jobs:
-  shellcheck:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: shellcheck $(git ls-files '*.sh')
+      - run: scripts/verify.sh
