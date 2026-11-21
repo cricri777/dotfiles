@@ -29,6 +29,12 @@ link lazygit .config/lazygit
 link herdr/config.toml .config/herdr/config.toml
 link shell/aliases.sh .config/shell/aliases.sh
 link claude/keybindings.json .claude/keybindings.json
+link claude/AGENTS.md .claude/AGENTS.md
+link claude/CLAUDE.md .claude/CLAUDE.md
+link claude/hooks/cricri-guard.sh .claude/hooks/cricri-guard.sh
+for skill in "$repo"/claude/skills/*/; do
+  link "claude/skills/$(basename "$skill")" ".claude/skills/$(basename "$skill")"
+done
 
 # Source the shared aliases from ~/.bashrc once. Re-running does not add the line twice.
 # shellcheck disable=SC2016 # the line is written literally into ~/.bashrc, so $HOME must not expand here

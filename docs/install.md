@@ -22,7 +22,7 @@ git clone https://github.com/cricri777/dotfiles.git ~/git/perso/dotfiles
 ~/git/perso/dotfiles/install.sh
 ```
 
-The script symlinks each config into `~/.config` (Claude Code keybindings go to `~/.claude`, and the voice settings are merged into `~/.claude/settings.json`). Existing files are moved to `~/.config-backup-<timestamp>` first, so re-running it is safe.
+The script symlinks each config into `~/.config` (Claude Code keybindings go to `~/.claude`, and the shared voice and hooks settings are merged into `~/.claude/settings.json`). Existing files are moved to `~/.config-backup-<timestamp>` first, so re-running it is safe.
 
 It also adds one line to `~/.bashrc` that sources the shared aliases (`n` = nvim, `lg` = lazygit). Running the script again does not add the line twice.
 
@@ -61,4 +61,7 @@ rm ~/.config/nvim && mv ~/.config-backup-<timestamp>/.config/nvim ~/.config/nvim
 | `herdr/plugins.txt` | Herdr plugins to install (not linked) |
 | `shell/aliases.sh` | `~/.config/shell/aliases.sh`, sourced once from `~/.bashrc` |
 | `claude/keybindings.json` | `~/.claude/keybindings.json` |
+| `claude/AGENTS.md`, `claude/CLAUDE.md` | `~/.claude/AGENTS.md`, `~/.claude/CLAUDE.md` |
+| `claude/hooks/cricri-guard.sh` | `~/.claude/hooks/cricri-guard.sh`, blocks force pushes and pushes that fail `scripts/verify.sh` |
+| `claude/skills/<name>/` | `~/.claude/skills/<name>`, for example `/cricri [--auto] <task>` |
 | `claude/settings.shared.json` | Merged into `~/.claude/settings.json` with `jq` |

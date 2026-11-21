@@ -4,7 +4,7 @@
 
 1. Create a branch from `main`: `git checkout -b <short-description>`.
 2. Make your change in this repo, not in `~/.config`. The symlinks make the edits show up there.
-3. Run `shellcheck` on the scripts you changed (for example `shellcheck install.sh shell/aliases.sh`). CI runs it on every `*.sh` file.
+3. Run `scripts/verify.sh`. It checks shell syntax, JSON validity and shellcheck. CI runs it on every push.
 4. Commit with a short message that says what changed and why.
 5. Push the branch and open a pull request into `main`.
 
