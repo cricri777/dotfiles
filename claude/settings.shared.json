@@ -1,7 +1,7 @@
 {
   "voice": {
     "enabled": true,
-    "mode": "tap"
+    "mode": "hold"
   },
   "hooks": {
     "PreToolUse": [
