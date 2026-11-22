@@ -51,6 +51,22 @@ Backups from `install.sh` are kept in `~/.config-backup-<timestamp>`. To restore
 rm ~/.config/nvim && mv ~/.config-backup-<timestamp>/.config/nvim ~/.config/nvim
 ```
 
+## Commit signing
+
+`main` requires signed commits, so every machine that pushes needs its own signing key registered on GitHub. Run this once per machine:
+
+```bash
+ssh-keygen -t ed25519 -C "git-signing $(hostname)" -f ~/.ssh/git_signing_ed25519
+git config --global gpg.format ssh
+git config --global user.signingkey ~/.ssh/git_signing_ed25519.pub
+git config --global commit.gpgsign true
+git config --global tag.gpgsign true
+```
+
+Then add the public key at https://github.com/settings/ssh/new with the key type "Signing Key", or run `gh auth refresh -s admin:ssh_signing_key` followed by `gh ssh-key add ~/.ssh/git_signing_ed25519.pub --type signing --title "$(hostname)"`.
+
+Check with `git commit --allow-empty -m test && git log --show-signature -1`, then drop the test commit. Revoke a lost machine by deleting its key in the same settings page.
+
 ## Layout
 
 | Path | Linked to |
