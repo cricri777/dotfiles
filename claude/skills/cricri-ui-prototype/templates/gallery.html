@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="__LANG__">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>__TITLE__ - round __ROUND__</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.5/dist/index.global.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@reviewjs/annotate@1.6.0/annotate.js" data-api="/__PROJECT__/api" data-review-id="__PROJECT__" data-note="Open each variant, comment on what you like or dislike, and comment here to say which variant you prefer." defer></script>
+</head>
+<body class="min-h-screen bg-slate-50 text-slate-900 antialiased">
+  <main class="mx-auto max-w-6xl px-4 py-10">
+    <h1 class="text-3xl font-semibold">__TITLE__</h1>
+    <p class="mt-2 text-slate-600">Round __ROUND__. Open each variant, comment on the page, then comment here to name the variant you prefer.</p>
+    <div class="mt-8 grid gap-6 md:grid-cols-3">
+      <a href="variants/a/index.html" class="block overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm hover:shadow-md">
+        <img src="screens/a/768.png" alt="Variant A" class="h-64 w-full object-cover object-top">
+        <div class="p-4">
+          <h2 class="text-lg font-medium">Variant A</h2>
+          <p class="mt-1 text-sm text-slate-600">__DIRECTION_A__</p>
+        </div>
+      </a>
+      <a href="variants/b/index.html" class="block overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm hover:shadow-md">
+        <img src="screens/b/768.png" alt="Variant B" class="h-64 w-full object-cover object-top">
+        <div class="p-4">
+          <h2 class="text-lg font-medium">Variant B</h2>
+          <p class="mt-1 text-sm text-slate-600">__DIRECTION_B__</p>
+        </div>
+      </a>
+      <a href="variants/c/index.html" class="block overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm hover:shadow-md">
+        <img src="screens/c/768.png" alt="Variant C" class="h-64 w-full object-cover object-top">
+        <div class="p-4">
+          <h2 class="text-lg font-medium">Variant C</h2>
+          <p class="mt-1 text-sm text-slate-600">__DIRECTION_C__</p>
+        </div>
+      </a>
+    </div>
+  </main>
+</body>
+</html>

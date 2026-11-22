@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal configs for nvim, lazygit, herdr and Claude Code (rules, hooks, the `/cricri` skill), shared across laptops.
+Personal configs for nvim, lazygit, herdr and Claude Code (rules, hooks, the `/cricri` and `/cricri-ui-prototype` skills), shared across laptops.
 
 ## Supported platforms
 
@@ -23,6 +23,7 @@ The script symlinks each config into `~/.config`. See the full guide in [docs/in
 
 - [Install, verify and restore](docs/install.md)
 - [Herdr: plugins and keybindings](docs/herdr.md)
+- [UI prototypes for clients](docs/ui-prototype.md)
 - [Contributing](CONTRIBUTING.md)
 
 ## License

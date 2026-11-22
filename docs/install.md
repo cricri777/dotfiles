@@ -63,5 +63,5 @@ rm ~/.config/nvim && mv ~/.config-backup-<timestamp>/.config/nvim ~/.config/nvim
 | `claude/keybindings.json` | `~/.claude/keybindings.json` |
 | `claude/AGENTS.md`, `claude/CLAUDE.md` | `~/.claude/AGENTS.md`, `~/.claude/CLAUDE.md` |
 | `claude/hooks/cricri-guard.sh` | `~/.claude/hooks/cricri-guard.sh`, blocks force pushes and pushes that fail `scripts/verify.sh` |
-| `claude/skills/<name>/` | `~/.claude/skills/<name>`, for example `/cricri [--auto] <task>` |
+| `claude/skills/<name>/` | `~/.claude/skills/<name>`, for example `/cricri [--auto] <task>` and `/cricri-ui-prototype`, see [ui-prototype.md](ui-prototype.md) |
 | `claude/settings.shared.json` | Merged into `~/.claude/settings.json` with `jq` |
