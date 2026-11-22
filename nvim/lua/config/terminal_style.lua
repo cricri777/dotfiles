@@ -31,7 +31,7 @@ local function define_highlights()
   if not (fg and base) then
     return
   end
-  local bg = base + 0x020202 -- two levels lighter per channel
+  local bg = base + 0x030303 -- three levels lighter per channel
   vim.api.nvim_set_hl(0, "TerminalNormal", { bg = bg })
   vim.api.nvim_set_hl(0, "WinSeparator", { fg = blend(bg, fg, 0.25), bold = true })
 end
