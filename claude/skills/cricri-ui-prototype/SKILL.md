@@ -58,7 +58,7 @@ Fill the placeholders of the templates with `sed` or a small script: `__LANG__`,
 5. Build the gallery. Each card shows the screenshot and the one-line direction.
 6. Run `$SHOOT <page> <project-dir>/screens/<variant>` for each variant page, and for the gallery into `screens/gallery`. Read the PNG files. Fix overflow, overlap and unreadable contrast, then shoot again.
 7. Commit and tag `round-0`.
-8. Ask the user, then run `$PB/deploy.sh <project-dir>`. Print the client link, login and password from its output, and say that the user must share cb-lab with the client in Tailscale. The steps are in `docs/ui-prototype.md`.
+8. Ask the user, then run `$PB/deploy.sh <project-dir>`. Print the client link, login and password from its output, and say that only devices in the user's tailnet can open it.
 
 ## iterate `<project-dir>`
 

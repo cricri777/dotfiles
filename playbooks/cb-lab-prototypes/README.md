@@ -1,11 +1,11 @@
 # Playbook: client prototypes on cb-lab
 
-Hosts static HTML prototypes for clients on cb-lab, behind Tailscale and a password, with inline comments the agent can read. The `/cricri-ui-prototype` skill calls these scripts. The day-to-day steps are in [docs/ui-prototype.md](../../docs/ui-prototype.md).
+Hosts static HTML prototypes for clients on cb-lab, reachable only from devices in your own tailnet, behind a password, with inline comments the agent can read. The `/cricri-ui-prototype` skill calls these scripts. The day-to-day steps are in [docs/ui-prototype.md](../../docs/ui-prototype.md).
 
 ## How it works
 
 ```
-client browser, cb-lab shared to the client in Tailscale
+browser on a device in your tailnet
   -> https://cb-lab.tail66d40f.ts.net/<project>/     tailscale serve, tailnet only, port 443
   -> nginx 127.0.0.1:8090
        /<project>/                  password per project, files from /srv/prototypes/<project>
@@ -23,15 +23,8 @@ client browser, cb-lab shared to the client in Tailscale
 
 1. Run `./setup-server.sh`. It installs `nodejs`, `jq`, `apache2-utils`, the annotate server and its systemd unit, the nginx config and the `tailscale serve` mapping. It is safe to rerun and prints `ok` for anything that did not change.
 2. In the Tailscale admin console, check that HTTPS certificates are on.
-3. Add a grant so shared users reach only port 443. Put it after your own grants:
 
-   ```json
-   {"src": ["autogroup:shared"], "dst": ["*"], "ip": ["443"]}
-   ```
-
-   The Tailscale docs give this pattern: https://tailscale.com/docs/features/sharing
-4. Share cb-lab with each client's email from the Machines page. Shared users reach only the machines shared with them.
-5. Once, from a second Tailscale account, open a deployed project URL. Tailscale does not state in its docs that shared users can open a Serve URL, so confirm it before the first real client.
+Do not share cb-lab outside your tailnet. Only devices signed in to your own tailnet can open the URLs.
 
 ## Scripts
 

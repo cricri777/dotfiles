@@ -29,10 +29,10 @@ chromium --version
    Claude asks for the business name, pages and language if they are missing. It builds `brief.md`, 3 variants and a gallery, and checks screenshots at 375, 768 and 1440 px.
 3. Open `~/prototypes/acme/index.html` in a browser to look at the 3 variants yourself.
 4. Answer yes when Claude asks to deploy. It prints a client link, a login and a password.
-5. Share cb-lab with the client, once per client: in the Tailscale admin console, open Machines, the menu of cb-lab, Share, and enter their email. The client accepts the invite and installs Tailscale with their own account.
-6. Send the client a message like this, translated to their language:
+5. Open the link from a device signed in to your tailnet. cb-lab is not shared outside it, so the client reviews on your device, or you add their device to your own tailnet.
+6. Give the reviewer a message like this, translated to their language:
 
-   > Install Tailscale and accept the invite for cb-lab. Open this link: `<client link>`. Log in with `<login>` and `<password>`. Open each variant, click the Review button at the bottom right, and add pins, highlights or drawings with your comments. On the first page, comment to tell me which variant you prefer.
+   > Open this link: `<client link>`. Log in with `<login>` and `<password>`. Open each variant, click the Review button at the bottom right, and add pins, highlights or drawings with your comments. On the first page, comment to tell me which variant you prefer.
 
 ## For each round
 
@@ -72,7 +72,6 @@ git clone cb-lab:git/prototypes/acme.git
 | Bring it back | `/cricri-ui-prototype online ~/prototypes/acme` or `$PB/online.sh acme` |
 | Remove everything except the git repo | `/cricri-ui-prototype cleanup ~/prototypes/acme` or `$PB/cleanup.sh acme` |
 | Delete the git repo for good | Run the `rm -rf` command that `cleanup.sh` prints. Only an admin does this. |
-| Stop a client from reaching cb-lab | Remove their share in the Tailscale admin console. |
 
 ## When something goes wrong
 
@@ -81,7 +80,7 @@ git clone cb-lab:git/prototypes/acme.git
 | The client sees 401 | Wrong login or password. Run `$PB/deploy.sh ~/prototypes/acme` again, it reprints the link, login and password. |
 | The client sees 503 | The project is offline. Run `online.sh`. |
 | The client sees 404 | The project was never deployed, or `cleanup.sh` ran. |
-| The client cannot reach cb-lab at all | The share is not accepted, Tailscale is off on their machine, or the grant blocks port 443. |
+| The page does not open | The device is not signed in to your tailnet, or Tailscale is off on it. |
 | The Review button is missing | The client's browser cannot load the jsDelivr CDN. Try another network. |
 | The client's comments do not show up for you | Ask the client to open the client link with `?an_invite=` once. Then run `feedback.sh acme list` again. |
 | `deploy.sh` says uncommitted changes | Commit in the project folder, then deploy again. |
