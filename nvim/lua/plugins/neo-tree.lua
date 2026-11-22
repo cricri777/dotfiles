@@ -7,9 +7,10 @@ return {
           function(state)
             local name = state.tree:get_node().name
             vim.fn.setreg("+", name, "c")
-            vim.notify("Copied to clipboard: " .. name)
+            vim.fn.setreg("0", name, "c")
+            vim.notify("Copied to clipboard and register 0: " .. name)
           end,
-          desc = "Copy File Name to Clipboard",
+          desc = "Copy File Name to Clipboard and Register 0",
         },
         ["<C-y>"] = "copy_to_clipboard",
       },
