@@ -13,5 +13,6 @@
 - If the push is rejected because `main` moved, fetch, rebase, resolve and verify again. After 3 rejections, interactive mode stops and asks. Auto mode uses the fallback.
 - If the repo has CI, run `gh run watch` on the triggered run. If it is red, fix forward through 03-verify.md, or run `git revert`, push, and report.
 - Never force-push.
+- The guard hook scans the whole Bash command for the words `git push` and flag-like tokens, so keep those words out of echo labels and inline scripts.
 - Fallback: push `HEAD:cricri/<slug>`, leave `main` untouched, and explain in the report. Auto mode uses this when verification still fails after the budget.
 - Call `ExitWorktree` when done.
