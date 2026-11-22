@@ -123,5 +123,6 @@ vim.keymap.set({ "n", "t" }, "<M-t>", function()
     vim.api.nvim_win_set_buf(0, hidden)
   else
     vim.cmd("terminal")
+    vim.bo.bufhidden = "wipe" -- closing the window also deletes the terminal buffer
   end
 end, { desc = "Terminal: open under editor / toggle 20% <-> full" })
