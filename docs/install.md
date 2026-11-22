@@ -67,6 +67,23 @@ Then add the public key at https://github.com/settings/ssh/new with the key type
 
 Check with `git commit --allow-empty -m test && git log --show-signature -1`, then drop the test commit. Revoke a lost machine by deleting its key in the same settings page.
 
+## Server access to a repo
+
+A server such as cb-lab that sends commits to GitHub needs its own deploy key per repo, because a deploy key works for one repo only. The signing key above is shared by every repo on that machine. Replace `<repo>` below.
+
+```bash
+ssh-keygen -t ed25519 -N "" -C "$(hostname) deploy <repo>" -f ~/.ssh/github_<repo>_ed25519
+printf '\nHost github-<repo>\n  HostName github.com\n  User git\n  IdentityFile ~/.ssh/github_<repo>_ed25519\n  IdentitiesOnly yes\n' >> ~/.ssh/config
+gh api meta --jq '.ssh_keys[]' | sed 's/^/github.com /' >> ~/.ssh/known_hosts
+git remote set-url origin git@github-<repo>:cricri777/<repo>.git
+```
+
+Then add `~/.ssh/github_<repo>_ed25519.pub` at https://github.com/cricri777/<repo>/settings/keys/new with "Allow write access" ticked. Test with `ssh -T github-<repo>`. Run `gh api meta` on a machine with `gh`, since cb-lab has none.
+
+## Branch rule on every repo
+
+Each public repo of mine has the ruleset `protect-main` on its default branch: no deletion, no force update, signed commits only. To add it to a new repo, run `scripts/protect-repo.sh <repo>`, which is safe to rerun. Private repos need GitHub Pro for rulesets, and forks are left alone.
+
 ## Layout
 
 | Path | Linked to |
