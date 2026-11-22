@@ -28,7 +28,7 @@ Any change made in step 4, 5 or 6 sends you back through step 3.
 
 - Interactive: the human reviews the plan. Stop and ask when stuck.
 - Both modes: the human always reviews and approves the plan in step 1.
-- Auto: no human interaction after the plan is approved. Do not call `AskUserQuestion` after step 1. Pick the simplest reasonable option for each ambiguity and list it under Assumptions. The verify loop has a budget of 5 rounds. End with a final report that lists the changes, the verification summary, the assumptions, the commit SHA or fallback branch, and the retro PR links.
+- Auto: no human interaction after the plan is approved. Do not call `AskUserQuestion` after step 1. Pick the simplest reasonable option for each ambiguity and list it under Assumptions. The verify loop has a budget of 5 rounds. End with a final report, written following playbook/06-unslop.md, that lists the changes, the verification summary, the assumptions, the commit SHA or fallback branch, and the retro PR links.
 
 ## Hard rules
 

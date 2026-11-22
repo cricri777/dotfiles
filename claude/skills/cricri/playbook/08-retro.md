@@ -4,3 +4,4 @@
 - Target-repo lesson: create a branch, edit its `CLAUDE.md` or `CONTRIBUTING.md`, push, and run `gh pr create`.
 - Playbook lesson: do the same in the dotfiles repo. `readlink -f ~/.claude/skills/cricri` locates it.
 - Never auto-merge a PR. Put the links in the final report.
+- Write the PR text following 06-unslop.md.
