@@ -13,6 +13,7 @@ return {
 				signature = { enabled = false },
 			},
 			presets = { command_palette = false },
+			views = { cmdline_popup = { position = { row = 5, col = "50%" } } },
 		},
 	},
 	{ "rcarriga/nvim-notify", enabled = false },
