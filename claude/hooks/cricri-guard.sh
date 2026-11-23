@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -uo pipefail
 
+export PATH="$HOME/.cargo/bin:$PATH"
+
 input="$(cat)"
 command="$(jq -r '.tool_input.command // empty' <<<"$input")"
 cwd="$(jq -r '.cwd // empty' <<<"$input")"
