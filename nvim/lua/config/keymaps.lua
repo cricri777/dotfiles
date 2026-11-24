@@ -61,10 +61,11 @@ vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Terminal: exit to no
 
 -- Alt+T cycles a terminal in a bottom split under the main editor window (not under the file tree):
 --   1st press: open it small (~20% of the screen height)
---   2nd press: expand it to full height
+--   2nd press: expand it to ~90% of the screen height
 --   3rd press: close it (only the code window remains); the shell keeps running in a hidden
 --              buffer, so the next press reopens the same session.
 local TERM_HEIGHT_RATIO = 0.20
+local TERM_BIG_HEIGHT_RATIO = 0.90
 
 local function is_floating(win)
   return vim.api.nvim_win_get_config(win).relative ~= ""
@@ -128,12 +129,12 @@ vim.keymap.set({ "n", "t" }, "<M-t>", function()
   if win then
     local small = small_height()
     if vim.api.nvim_win_get_height(win) > small + 1 then
-      -- Full height -> close (the buffer is hidden, the shell keeps running).
+      -- Expanded -> close (the buffer is hidden, the shell keeps running).
       vim.cmd("stopinsert")
       vim.api.nvim_win_close(win, false)
     else
-      -- Small -> full height.
-      vim.api.nvim_win_set_height(win, vim.o.lines)
+      -- Small -> expanded (90%).
+      vim.api.nvim_win_set_height(win, math.floor(vim.o.lines * TERM_BIG_HEIGHT_RATIO))
       vim.api.nvim_set_current_win(win)
     end
     return
@@ -149,4 +150,4 @@ vim.keymap.set({ "n", "t" }, "<M-t>", function()
     vim.cmd("terminal")
   end
   vim.bo.bufhidden = "hide"
-end, { desc = "Terminal: open small -> full height -> close" })
+end, { desc = "Terminal: open small -> 90% -> close" })
