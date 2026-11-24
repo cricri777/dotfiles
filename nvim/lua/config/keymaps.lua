@@ -59,8 +59,11 @@ end, { desc = "Toggle NeoTree width (expand / restore)" })
 vim.keymap.set("t", "<C-\\><C-n>", "<Nop>", { desc = "Disabled (use <Esc><Esc>)" })
 vim.keymap.set("t", "<Esc><Esc>", [[<C-\><C-n>]], { desc = "Terminal: exit to normal mode" })
 
--- Alt+T: open a terminal in a bottom split under the main editor window (not under the file tree).
--- Pressing it again toggles that terminal between ~20% of the screen height and full height.
+-- Alt+T cycles a terminal in a bottom split under the main editor window (not under the file tree):
+--   1st press: open it small (~20% of the screen height)
+--   2nd press: expand it to full height
+--   3rd press: close it (only the code window remains); the shell keeps running in a hidden
+--              buffer, so the next press reopens the same session.
 local TERM_HEIGHT_RATIO = 0.20
 
 local function is_floating(win)
@@ -99,30 +102,51 @@ local function editor_win()
   return best or cur
 end
 
+-- A terminal buffer that is not displayed in any window but whose shell is still alive.
+local function hidden_term_buf()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == "terminal" and vim.fn.bufwinid(buf) == -1 then
+      return buf
+    end
+  end
+end
+
+-- When the shell exits (e.g. `exit`), drop its buffer so a dead terminal is never reopened.
+vim.api.nvim_create_autocmd("TermClose", {
+  group = vim.api.nvim_create_augroup("term_toggle", { clear = true }),
+  callback = function(args)
+    vim.schedule(function()
+      if vim.api.nvim_buf_is_valid(args.buf) then
+        vim.api.nvim_buf_delete(args.buf, { force = true })
+      end
+    end)
+  end,
+})
+
 vim.keymap.set({ "n", "t" }, "<M-t>", function()
   local win = find_term_win()
   if win then
     local small = small_height()
-    local big = vim.api.nvim_win_get_height(win) > small + 1
-    vim.api.nvim_win_set_height(win, big and small or vim.o.lines)
-    vim.api.nvim_set_current_win(win)
+    if vim.api.nvim_win_get_height(win) > small + 1 then
+      -- Full height -> close (the buffer is hidden, the shell keeps running).
+      vim.cmd("stopinsert")
+      vim.api.nvim_win_close(win, false)
+    else
+      -- Small -> full height.
+      vim.api.nvim_win_set_height(win, vim.o.lines)
+      vim.api.nvim_set_current_win(win)
+    end
     return
   end
 
-  local hidden
-  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
-    if vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buftype == "terminal" and vim.fn.bufwinid(buf) == -1 then
-      hidden = buf
-      break
-    end
-  end
-
+  -- Closed -> open small, reusing the hidden terminal if there is one.
+  local hidden = hidden_term_buf()
   vim.api.nvim_set_current_win(editor_win())
   vim.cmd("belowright " .. small_height() .. "split")
   if hidden then
     vim.api.nvim_win_set_buf(0, hidden)
   else
     vim.cmd("terminal")
-    vim.bo.bufhidden = "wipe" -- closing the window also deletes the terminal buffer
   end
-end, { desc = "Terminal: open under editor / toggle 20% <-> full" })
+  vim.bo.bufhidden = "hide"
+end, { desc = "Terminal: open small -> full height -> close" })
